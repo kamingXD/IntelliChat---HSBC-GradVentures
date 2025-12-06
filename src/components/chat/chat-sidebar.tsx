@@ -8,6 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuAction,
   SidebarFooter,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2, LogOut } from 'lucide-react';
@@ -31,6 +32,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 export default function ChatSidebar() {
   const { chats, deleteChat } = useChat();
+  const { toggleSidebar, isMobile } = useSidebar();
   const params = useParams();
   const router = useRouter();
   const activeChatId = params.chatId;
@@ -43,6 +45,12 @@ export default function ChatSidebar() {
     e.stopPropagation();
     e.preventDefault();
     if(deleteChat) deleteChat(chatId);
+  }
+
+  const handleChatSelection = () => {
+    if (isMobile) {
+      toggleSidebar();
+    }
   }
 
   return (
@@ -71,6 +79,7 @@ export default function ChatSidebar() {
                   asChild
                   isActive={activeChatId === chat.id}
                   className="flex-col items-start h-auto py-2"
+                  onClick={handleChatSelection}
                 >
                   <a>
                     <span className="w-full truncate">{chat.title}</span>
