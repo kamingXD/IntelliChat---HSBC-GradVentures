@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/google-genai';
 import {z} from 'genkit';
 
 const SuggestResponseOptionsInputSchema = z.object({
@@ -32,6 +33,7 @@ export async function suggestResponseOptions(
 
 const prompt = ai.definePrompt({
   name: 'suggestResponseOptionsPrompt',
+  model: googleAI.model('gemini-2.5-flash'),
   input: {schema: SuggestResponseOptionsInputSchema},
   output: {schema: SuggestResponseOptionsOutputSchema},
   system: `You are an expert at providing relevant, short, and helpful response options.
