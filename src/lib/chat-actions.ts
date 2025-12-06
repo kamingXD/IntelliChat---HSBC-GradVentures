@@ -1,7 +1,6 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { streamFlow } from '@genkit-ai/next/server';
 import { z } from 'zod';
 import type { Message } from './types';
 
@@ -28,8 +27,6 @@ const continueConversationFlow = ai.defineFlow(
       stream: true,
     });
 
-    // The entire flow result is streamed to the client, so we just need
-    // to return the text from the stream.
     return llmResponse.text;
   }
 );
@@ -41,6 +38,20 @@ export async function continueConversation(history: Message[], prompt: string) {
         content: m.content
     }));
 
-    const {stream} = await streamFlow(continueConversationFlow, { history: messages, prompt });
+    const llmResponse = await ai.generate({
+        history: messages,
+        prompt: prompt,
+        stream: true
+    });
+
+    const stream = new ReadableStream({
+        async start(controller) {
+            for await (const chunk of llmResponse.stream) {
+                controller.enqueue(chunk.text);
+            }
+            controller.close();
+        }
+    });
+    
     return stream;
 }
