@@ -23,7 +23,7 @@ export default function MessageList() {
   
   return (
     <ScrollArea className="flex-1" ref={scrollAreaRef}>
-      <div className="p-4 md:p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-4">
         {activeChat.messages.map((message, index) => (
             <MessageBubble key={message.id} message={message} />
         ))}
