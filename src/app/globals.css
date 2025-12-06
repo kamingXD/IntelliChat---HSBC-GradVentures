@@ -121,7 +121,7 @@ body {
         @apply mb-1;
     }
     .prose li > p {
-        @apply inline;
+        @apply my-0;
     }
     .prose hr {
         @apply my-1;
