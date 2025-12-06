@@ -1,7 +1,7 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { runFlow } from 'genkit';
+import { streamFlow } from '@genkit-ai/next/server';
 import { z } from 'zod';
 import type { Message } from './types';
 
@@ -41,21 +41,6 @@ export async function continueConversation(history: Message[], prompt: string) {
         content: m.content
     }));
 
-    const flowStream = new ReadableStream({
-      async start(controller) {
-        try {
-          await runFlow(continueConversationFlow, { history: messages, prompt }, {
-              streamingCallback: (chunk) => {
-                  if (chunk) {
-                    controller.enqueue(new TextEncoder().encode(chunk));
-                  }
-              },
-          });
-        } finally {
-          controller.close();
-        }
-      },
-    });
-
-    return flowStream;
+    const {stream} = await streamFlow(continueConversationFlow, { history: messages, prompt });
+    return stream;
 }

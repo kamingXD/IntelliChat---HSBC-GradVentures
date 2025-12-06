@@ -56,7 +56,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if(!isChatHookLoading) {
         localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chats));
         // If there are no more chats, redirect to the home page.
-        if (chats.length === 0) {
+        if (chats.length === 0 && activeChatId === null) {
           router.push('/');
         }
       }
@@ -68,7 +68,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: 'Could not save your chat history.',
       });
     }
-  }, [chats, toast, isChatHookLoading, router]);
+  }, [chats, toast, isChatHookLoading, router, activeChatId]);
   
   const addChat = useCallback((productType: string) => {
     const newChat: Chat = {
@@ -93,6 +93,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     // Immediately navigate away if deleting the active chat
     if (isDeletingActiveChat) {
+        setActiveChatId(null);
         router.push('/chat');
     }
 
