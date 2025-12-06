@@ -19,11 +19,7 @@ export default function ChatPage() {
     if (chatId && setActiveChatId) {
       setActiveChatId(chatId);
     }
-    return () => {
-      if (setActiveChatId) {
-        setActiveChatId(null);
-      }
-    };
+    // No cleanup function needed here, active chat is managed by the page lifecycle
   }, [chatId, setActiveChatId]);
 
   useEffect(() => {

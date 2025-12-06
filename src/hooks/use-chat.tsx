@@ -85,12 +85,15 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const deleteChat = useCallback((chatId: string) => {
-    setChats(prev => prev.filter(c => c.id !== chatId));
+    const isDeletingActiveChat = activeChatId === chatId;
     
-    if (activeChatId === chatId) {
-      setActiveChatId(null);
-      router.push('/chat');
+    // Immediately navigate away if deleting the active chat
+    if (isDeletingActiveChat) {
+        router.push('/chat');
     }
+
+    setChats(prev => prev.filter(c => c.id !== chatId));
+
   }, [activeChatId, router]);
 
   const activeChat = useMemo(() => chats.find(c => c.id === activeChatId) || null, [chats, activeChatId]);
