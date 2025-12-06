@@ -118,40 +118,48 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
 
     const newUserMessage: Message = { id: crypto.randomUUID(), role: 'user', content };
-    const assistantMessage: Message = { id: crypto.randomUUID(), role: 'assistant', content: '' };
-    
     const updatedMessages = [...activeChat.messages, newUserMessage];
     updateChatMessages(activeChatId, updatedMessages);
-    
+
     try {
       const stream = await continueConversation(
-        activeChat.messages.map(({ id, ...rest }) => rest), // Don't send ID to backend
+        updatedMessages.map(({ id, ...rest }) => rest), // Don't send ID to backend
         content
       );
 
-      let accumulatedContent = '';
       const reader = stream.getReader();
       const decoder = new TextDecoder();
-      
-      updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
+      let assistantMessage: Message = { id: crypto.randomUUID(), role: 'assistant', content: '' };
+      let assistantMessageAdded = false;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        accumulatedContent += decoder.decode(value, { stream: true });
-        assistantMessage.content = accumulatedContent;
-        updateChatMessages(activeChatId, [...updatedMessages, { ...assistantMessage }]);
+        const chunk = decoder.decode(value, { stream: true });
+        assistantMessage.content += chunk;
+        
+        if (!assistantMessageAdded) {
+          updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
+          assistantMessageAdded = true;
+        } else {
+          setChats(prevChats => prevChats.map(chat => 
+            chat.id === activeChatId 
+              ? { ...chat, messages: chat.messages.map(m => m.id === assistantMessage.id ? { ...assistantMessage } : m) }
+              : chat
+          ));
+        }
       }
       
-      const conversationHistory = [...updatedMessages, assistantMessage].map(m => m.content);
+      const finalMessages = [...updatedMessages, assistantMessage];
+      const conversationHistory = finalMessages.map(m => `${m.role}: ${m.content}`);
       const suggestionResult = await suggestResponseOptions({ conversationHistory, currentMessage: assistantMessage.content });
       setSuggestions(suggestionResult);
 
     } catch (error) {
       console.error('Error streaming response:', error);
-      assistantMessage.content = 'Sorry, I encountered an error. Please try again.';
-      updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
+      const errorMessage: Message = { id: crypto.randomUUID(), role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' };
+      updateChatMessages(activeChatId, [...updatedMessages, errorMessage]);
        toast({
         variant: 'destructive',
         title: 'AI Error',
