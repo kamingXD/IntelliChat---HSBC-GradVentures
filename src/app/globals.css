@@ -94,22 +94,10 @@ body {
         @apply text-foreground;
     }
     .prose p {
-        @apply my-2;
+        @apply my-1;
     }
     .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-        @apply text-foreground;
-    }
-    .prose h1 {
-        @apply my-3;
-    }
-    .prose h2 {
-        @apply my-2;
-    }
-    .prose h3 {
-        @apply my-1;
-    }
-    .prose h4, .prose h5, .prose h6 {
-        @apply my-1;
+        @apply text-foreground my-1;
     }
     .prose strong {
         @apply text-foreground;
@@ -121,13 +109,13 @@ body {
         @apply text-sm font-mono bg-muted text-foreground rounded-sm px-1 py-0.5;
     }
     .prose pre {
-        @apply bg-muted text-foreground p-3 rounded-md my-2;
+        @apply bg-muted text-foreground p-3 rounded-md my-1;
     }
     .prose blockquote {
-        @apply border-l-4 border-primary pl-4 text-muted-foreground my-2;
+        @apply border-l-4 border-primary pl-4 text-muted-foreground my-1;
     }
     .prose ul, .prose ol {
-        @apply list-inside my-2;
+        @apply list-inside my-1;
     }
     .prose li {
         @apply mb-1;
@@ -136,6 +124,6 @@ body {
         @apply inline;
     }
     .prose hr {
-        @apply my-2;
+        @apply my-1;
     }
 }
