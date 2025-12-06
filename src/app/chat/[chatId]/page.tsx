@@ -1,17 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useChat } from '@/hooks/use-chat';
 import ChatView from '@/components/chat/chat-view';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useToast } from '@/hooks/use-toast';
 
 export default function ChatPage() {
   const params = useParams();
-  const router = useRouter();
-  const { setActiveChatId, activeChat, isLoading: isChatHookLoading, chats } = useChat();
-  const { toast } = useToast();
+  const { setActiveChatId, activeChat, isChatHookLoading } = useChat();
 
   const chatId = Array.isArray(params.chatId) ? params.chatId[0] : params.chatId;
 
@@ -19,23 +16,7 @@ export default function ChatPage() {
     if (chatId && setActiveChatId) {
       setActiveChatId(chatId);
     }
-    // No cleanup function needed here, active chat is managed by the page lifecycle
   }, [chatId, setActiveChatId]);
-
-  useEffect(() => {
-    // Wait until the initial load of all chats is done before checking for existence
-    if (isChatHookLoading === false && chats.length > 0) {
-      const chatExists = chats.some(c => c.id === chatId);
-      if (!chatExists) {
-        toast({
-            variant: 'destructive',
-            title: 'Chat not found',
-            description: "The conversation you're looking for doesn't exist.",
-        })
-        router.push('/');
-      }
-    }
-  }, [isChatHookLoading, chats, chatId, router, toast]);
 
   if (isChatHookLoading || !activeChat) {
     return (
