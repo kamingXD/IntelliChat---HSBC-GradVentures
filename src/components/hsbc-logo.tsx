@@ -13,7 +13,7 @@ export function HsbcLogo({
     return (
       <div className={cn("relative h-8 w-8 text-primary", className)}>
         <Image
-          src="/hsbc-logo.png"
+          src="/hsbc-logo-2.png"
           alt="HSBC Icon"
           fill
           sizes="32px"
@@ -26,7 +26,7 @@ export function HsbcLogo({
   return (
     <div className={cn("relative h-8 w-24", className)}>
        <Image
-        src="/hsbc-logo.png"
+        src="/hsbc-logo-2.png"
         alt="HSBC Logo"
         fill
         sizes="96px"
