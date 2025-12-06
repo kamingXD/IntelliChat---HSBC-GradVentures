@@ -10,11 +10,12 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 interface ChatContextType {
   chats: Chat[];
   activeChat: Chat | null;
+  isLoading: boolean;
+  isChatHookLoading: boolean;
   addChat: (productType: string) => string;
   deleteChat: (chatId: string) => void;
   setActiveChatId: (chatId: string | null) => void;
   sendMessage: (content: string) => Promise<void>;
-  isLoading: boolean;
   suggestions: string[];
   clearSuggestions: () => void;
 }
@@ -27,6 +28,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [chats, setChats] = useState<Chat[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isChatHookLoading, setIsChatHookLoading] = useState(true);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const { toast } = useToast();
   const router = useRouter();
@@ -44,13 +46,14 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         title: 'Error',
         description: 'Could not load your chat history.',
       });
+    } finally {
+        setIsChatHookLoading(false);
     }
   }, [toast]);
 
   useEffect(() => {
     try {
-      // Only save to local storage if chats have been loaded
-      if(chats.length > 0){
+      if(!isChatHookLoading) {
         localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chats));
       }
     } catch (error) {
@@ -61,7 +64,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: 'Could not save your chat history.',
       });
     }
-  }, [chats, toast]);
+  }, [chats, toast, isChatHookLoading]);
   
   const addChat = useCallback((productType: string) => {
     const newChat: Chat = {
@@ -82,13 +85,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const deleteChat = useCallback((chatId: string) => {
-    setChats(prev => {
-      const newChats = prev.filter(c => c.id !== chatId);
-      if (newChats.length === 0) {
-        localStorage.removeItem(CHAT_STORAGE_KEY);
-      }
-      return newChats;
-    });
+    setChats(prev => prev.filter(c => c.id !== chatId));
     
     if (activeChatId === chatId) {
       setActiveChatId(null);
@@ -165,6 +162,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setActiveChatId,
     sendMessage,
     isLoading,
+    isChatHookLoading,
     suggestions,
     clearSuggestions
   };
