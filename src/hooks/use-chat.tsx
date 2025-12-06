@@ -123,7 +123,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       const stream = await continueConversation(
-        updatedMessages.map(({ id, ...rest }) => rest), // Don't send ID to backend
+        updatedMessages.map(({ id, ...rest }) => rest),
         content
       );
 
@@ -152,7 +152,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       const finalMessages = [...updatedMessages, assistantMessage];
-      const conversationHistory = finalMessages.map(m => `${m.role}: ${m.content}`);
+      const conversationHistory = finalMessages.map(m => `${m.role === 'assistant' ? 'model' : 'user'}: ${m.content}`);
       const suggestionResult = await suggestResponseOptions({ conversationHistory, currentMessage: assistantMessage.content });
       setSuggestions(suggestionResult);
 
