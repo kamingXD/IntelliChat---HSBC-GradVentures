@@ -94,7 +94,7 @@ body {
         @apply text-foreground;
     }
     .prose p {
-        @apply my-1;
+        @apply my-0 mb-2;
     }
     .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
         @apply text-foreground my-1;
@@ -115,7 +115,7 @@ body {
         @apply border-l-4 border-primary pl-4 text-muted-foreground my-1;
     }
     .prose ul, .prose ol {
-        @apply list-inside my-1;
+        @apply my-0 list-inside;
     }
     .prose li {
         @apply mb-1;
