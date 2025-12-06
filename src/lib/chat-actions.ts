@@ -1,14 +1,14 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { gemini25Flash } from '@genkit-ai/googleai';
+import { googleAI } from '@genkit-ai/google-genai';
 import type { Message } from './types';
 
 export async function continueConversation(
   history: Omit<Message, 'id'>[],
   prompt: string
 ): Promise<ReadableStream<Uint8Array>> {
-  const model = gemini25Flash;
+  const model = googleAI.model('gemini-2.5-flash');
 
   const { stream } = await ai.generateStream({
     model,
