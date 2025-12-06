@@ -37,17 +37,16 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             : 'bg-primary/10 text-foreground rounded-bl-none',
         )}
       >
-        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
-          ) : (
+        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap chat-bubble-content">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {message.content}
             </ReactMarkdown>
-          )}
         </div>
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+          </div>
+        )}
       </div>
     </div>
   );

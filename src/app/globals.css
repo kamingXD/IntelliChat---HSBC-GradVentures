@@ -122,4 +122,29 @@ body {
     .prose hr {
         @apply my-2;
     }
+    .chat-bubble-content p,
+    .chat-bubble-content ul,
+    .chat-bubble-content ol,
+    .chat-bubble-content h1,
+    .chat-bubble-content h2,
+    .chat-bubble-content h3,
+    .chat-bubble-content h4,
+    .chat-bubble-content h5,
+    .chat-bubble-content h6,
+    .chat-bubble-content blockquote,
+    .chat-bubble-content pre {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .chat-bubble-content p:not(:last-child),
+    .chat-bubble-content ul:not(:last-child),
+    .chat-bubble-content ol:not(:last-child),
+    .chat-bubble-content blockquote:not(:last-child) {
+      margin-bottom: 0.5rem; /* 8px */
+    }
+
+    .chat-bubble-content li > p {
+        margin-bottom: 0 !important;
+    }
 }
