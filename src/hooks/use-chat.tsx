@@ -140,7 +140,12 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         assistantMessage.content += chunk;
         
         // Sanitize response to remove extra newlines
-        assistantMessage.content = assistantMessage.content.replace(/\n{3,}/g, '\n\n');
+        // First, collapse any occurrence of 3 or more newlines into exactly 2
+        let sanitizedContent = assistantMessage.content.replace(/\n{3,}/g, '\n\n');
+        // Then, remove any blank line that immediately follows a list item marker
+        sanitizedContent = sanitizedContent.replace(/(^(\s*)[*+-]|\d+\.)\s*\n\s*\n/gm, '$1\n');
+        assistantMessage.content = sanitizedContent;
+
 
         if (!assistantMessageAdded) {
           updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
