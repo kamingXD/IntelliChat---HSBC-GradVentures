@@ -128,5 +128,11 @@ export default {
       }),
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-animate'), 
+    require('@tailwindcss/typography'),
+    function ({ addVariant }: any) {
+      addVariant('prose-chat', '&.prose-chat')
+    },
+  ],
 } satisfies Config;

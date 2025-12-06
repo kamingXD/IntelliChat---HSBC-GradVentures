@@ -37,7 +37,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             : 'bg-primary/10 text-foreground rounded-bl-none',
         )}
       >
-        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap chat-bubble-content">
+        <div className="prose prose-sm prose-chat dark:prose-invert max-w-none whitespace-pre-wrap">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {message.content}
             </ReactMarkdown>

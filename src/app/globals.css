@@ -109,33 +109,29 @@ body {
         @apply my-2;
     }
     
-    .chat-bubble-content p,
-    .chat-bubble-content ul,
-    .chat-bubble-content ol,
-    .chat-bubble-content h1,
-    .chat-bubble-content h2,
-    .chat-bubble-content h3,
-    .chat-bubble-content h4,
-    .chat-bubble-content h5,
-    .chat-bubble-content h6,
-    .chat-bubble-content blockquote,
-    .chat-bubble-content pre {
+    .prose-chat :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+
+    .prose-chat :where(ul, ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
       margin-top: 0;
       margin-bottom: 0;
+      padding-left: 1.2em;
     }
 
-    .chat-bubble-content p:not(:last-child),
-    .chat-bubble-content ul:not(:last-child),
-    .chat-bubble-content ol:not(:last-child),
-    .chat-bubble-content blockquote:not(:last-child) {
-      margin-bottom: 0.5rem; /* 8px */
+    .prose-chat :where(li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+      margin-top: 0.125em;
+      margin-bottom: 0.125em;
     }
 
-    .chat-bubble-content li > p {
-        margin-bottom: 0 !important;
+    .prose-chat :where(pre):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+      margin: 0.5em 0;
     }
 
-    .chat-bubble-content li:not(:last-child) {
-        margin-bottom: 0.25rem; /* 4px */
+    .prose-chat :where(blockquote):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+      margin: 0.5em 0;
+      padding-left: 1em;
+      border-left: 3px solid #e5e7eb;
     }
 }
