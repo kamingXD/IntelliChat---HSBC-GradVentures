@@ -1,7 +1,6 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { gemini15Flash } from '@genkit-ai/google-genai';
 import type { Message } from './types';
 
 export async function continueConversation(
@@ -9,7 +8,7 @@ export async function continueConversation(
   prompt: string
 ) {
   return ai.generateStream({
-    model: gemini15Flash,
+    model: 'googleai/gemini-1.5-flash',
     history,
     prompt: { text: prompt },
   }).toWebStream();
