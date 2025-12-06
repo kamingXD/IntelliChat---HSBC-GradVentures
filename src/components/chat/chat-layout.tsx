@@ -9,6 +9,7 @@ import ChatSidebar from '@/components/chat/chat-sidebar';
 import { useChat } from '@/hooks/use-chat';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Skeleton } from '../ui/skeleton';
 
 export function ChatLayout({ children }: { children: React.ReactNode }) {
   const { chats, isChatHookLoading } = useChat();
@@ -21,6 +22,7 @@ export function ChatLayout({ children }: { children: React.ReactNode }) {
   }, [chats, isChatHookLoading, router]);
 
   if (isChatHookLoading || !chats || chats.length === 0) {
+    // Render nothing while loading or if there are no chats to prevent an overlay on redirect
     return null;
   }
 
