@@ -135,4 +135,7 @@ body {
     .prose li > p {
         @apply inline;
     }
+    .prose hr {
+        @apply my-2;
+    }
 }
