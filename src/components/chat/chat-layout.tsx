@@ -7,23 +7,24 @@ import {
 } from '@/components/ui/sidebar';
 import ChatSidebar from '@/components/chat/chat-sidebar';
 import { useChat } from '@/hooks/use-chat';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { Skeleton } from '../ui/skeleton';
 
 export function ChatLayout({ children }: { children: React.ReactNode }) {
-  const { chats, isChatHookLoading } = useChat();
-  const router = useRouter();
+  const { isChatHookLoading } = useChat();
 
-  useEffect(() => {
-    if (!isChatHookLoading && (!chats || chats.length === 0)) {
-      router.push('/');
-    }
-  }, [chats, isChatHookLoading, router]);
-
-  if (isChatHookLoading || !chats || chats.length === 0) {
-    // Render nothing while loading or if there are no chats to prevent an overlay on redirect
-    return null;
+  if (isChatHookLoading) {
+    return (
+      <div className="flex h-screen w-full">
+        <div className="w-64 border-r p-4 hidden md:flex flex-col gap-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-8 w-full" />
+             <Skeleton className="h-16 w-full mt-4" />
+             <Skeleton className="h-16 w-full" />
+             <Skeleton className="h-16 w-full" />
+        </div>
+        <div className="flex-1" />
+      </div>
+    );
   }
 
   return (

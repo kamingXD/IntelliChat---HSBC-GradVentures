@@ -55,6 +55,10 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       if(!isChatHookLoading) {
         localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chats));
+        // If there are no more chats, redirect to the home page.
+        if (chats.length === 0) {
+          router.push('/');
+        }
       }
     } catch (error) {
       console.error('Failed to save chats to local storage:', error);
@@ -64,7 +68,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: 'Could not save your chat history.',
       });
     }
-  }, [chats, toast, isChatHookLoading]);
+  }, [chats, toast, isChatHookLoading, router]);
   
   const addChat = useCallback((productType: string) => {
     const newChat: Chat = {
