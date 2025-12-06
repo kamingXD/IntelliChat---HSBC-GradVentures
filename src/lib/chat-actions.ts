@@ -5,18 +5,27 @@ import { googleAI } from '@genkit-ai/google-genai';
 import type { Message } from './types';
 
 export async function continueConversation(
-  history: Omit<Message, 'id'>[],
+  history: {role: 'user' | 'model', content: string}[],
   prompt: string
 ): Promise<ReadableStream<Uint8Array>> {
   const model = googleAI.model('gemini-2.5-flash');
 
+  const fullHistory = [
+      ...history.map(msg => ({
+          role: msg.role,
+          content: [{ text: msg.content }]
+      })),
+      { role: 'user' as const, content: [{ text: prompt }] }
+  ];
+
+  // The last message should be the prompt, so remove it from history
+  const modelHistory = fullHistory.slice(0, fullHistory.length - 1);
+  const modelPrompt = fullHistory[fullHistory.length - 1];
+
   const { stream } = await ai.generateStream({
     model,
-    history: history.map(msg => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      content: [{ text: msg.content }],
-    })),
-    prompt: { text: prompt },
+    history: modelHistory,
+    prompt: modelPrompt,
     config: {
       temperature: 0.7,
     },
