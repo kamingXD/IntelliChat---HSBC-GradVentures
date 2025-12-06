@@ -96,6 +96,18 @@ body {
     .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
         @apply text-foreground;
     }
+    .prose h1 {
+        @apply my-4;
+    }
+    .prose h2 {
+        @apply my-3;
+    }
+    .prose h3 {
+        @apply my-2;
+    }
+    .prose h4, .prose h5, .prose h6 {
+        @apply my-1;
+    }
     .prose strong {
         @apply text-foreground;
     }
