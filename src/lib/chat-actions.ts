@@ -1,17 +1,18 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { streamFlow } from '@genkit-ai/next/server';
+import { runFlow } from 'genkit';
 import { z } from 'zod';
 import type { Message } from './types';
 
 const ChatRequestSchema = z.object({
-  messages: z.array(
+  history: z.array(
     z.object({
       role: z.enum(['user', 'model']),
       content: z.array(z.object({ text: z.string() })),
     })
   ),
+  prompt: z.string(),
 });
 
 const continueConversationFlow = ai.defineFlow(
@@ -20,20 +21,16 @@ const continueConversationFlow = ai.defineFlow(
     inputSchema: ChatRequestSchema,
     outputSchema: z.string(),
   },
-  async ({ messages }) => {
+  async ({ history, prompt }) => {
     const llmResponse = await ai.generate({
-      history: messages.map(m => ({...m, parts: m.content})),
-      prompt: '', // The last message is the prompt
+      history: history,
+      prompt: prompt,
       stream: true,
     });
 
-    let text = '';
-    for await (const chunk of llmResponse.stream) {
-      if (chunk.text) {
-        text += chunk.text;
-      }
-    }
-    return text;
+    // The entire flow result is streamed to the client, so we just need
+    // to return the text from the stream.
+    return llmResponse.text();
   }
 );
 
@@ -42,8 +39,22 @@ export async function continueConversation(history: Message[], prompt: string) {
         role: m.role === 'assistant' ? 'model' as const : 'user' as const,
         content: [{ text: m.content }]
     }));
-    messages.push({ role: 'user', content: [{ text: prompt }] });
 
-    const stream = await streamFlow(continueConversationFlow, { messages });
-    return stream;
+    const flowStream = new ReadableStream({
+      async start(controller) {
+        try {
+          await runFlow(continueConversationFlow, { history: messages, prompt }, {
+              streamingCallback: (chunk) => {
+                  if (chunk) {
+                    controller.enqueue(new TextEncoder().encode(chunk));
+                  }
+              },
+          });
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return flowStream;
 }
