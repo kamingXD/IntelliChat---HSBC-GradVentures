@@ -139,6 +139,9 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const chunk = decoder.decode(value, { stream: true });
         assistantMessage.content += chunk;
         
+        // Sanitize response to remove extra newlines
+        assistantMessage.content = assistantMessage.content.replace(/\n{3,}/g, '\n\n');
+
         if (!assistantMessageAdded) {
           updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
           assistantMessageAdded = true;
