@@ -34,6 +34,9 @@ const prompt = ai.definePrompt({
   name: 'suggestResponseOptionsPrompt',
   input: {schema: SuggestResponseOptionsInputSchema},
   output: {schema: SuggestResponseOptionsOutputSchema},
+  system: `You are an expert at providing relevant, short, and helpful response options.
+If the conversation has just started, provide some useful getting-started questions.
+Otherwise, base your suggestions on the recent conversation history.`,
   prompt: `Given the following conversation history and the current message, suggest three possible response options as a multiple-choice list. The options should be short and relevant to the conversation.
 
 Conversation History:
