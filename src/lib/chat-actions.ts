@@ -23,10 +23,8 @@ const continueConversationFlow = ai.defineFlow(
   },
   async ({ history, prompt }) => {
     const llmResponse = await ai.generate({
-      // An OpenAI-compatible history consists of a flat list of messages.
-      // The new user prompt is just the last message in that list.
-      history: [...history, { role: 'user', content: prompt }],
-      prompt: '', // The prompt is included in the history
+      history: history,
+      prompt: prompt,
       stream: true,
     });
 
