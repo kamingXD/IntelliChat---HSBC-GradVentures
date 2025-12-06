@@ -8,5 +8,5 @@ export const ai = genkit({
       baseUrl: 'https://integrate.api.nvidia.com/v1',
     }),
   ],
-  model: 'googleai/gpt-oss-120b',
+  model: 'gpt-oss-120b',
 });
