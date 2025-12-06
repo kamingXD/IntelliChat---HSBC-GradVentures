@@ -21,7 +21,7 @@ const ChatRequestSchema = z.object({
 
 export async function continueConversation(history: Omit<Message, 'id'>[], prompt: string) {
     const llmResponse = await ai.generate({
-        model: 'googleai/gemini-1.5-flash',
+        model: 'googleai/gemini-pro',
         history: history,
         prompt: prompt,
         stream: true
