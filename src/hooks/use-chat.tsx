@@ -140,8 +140,8 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         assistantMessage.content += chunk;
         
         // Sanitize response to remove extra newlines
-        // Replace any sequence of three or more newlines with a single newline.
-        const sanitizedContent = assistantMessage.content.replace(/\n{3,}/g, '\n');
+        // Replace any sequence of two or more newlines with a single newline.
+        const sanitizedContent = assistantMessage.content.replace(/\n{2,}/g, '\n');
         assistantMessage.content = sanitizedContent;
 
 
