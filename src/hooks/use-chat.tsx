@@ -49,7 +49,8 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     try {
-      if (chats.length > 0) {
+      // Only save to local storage if chats have been loaded
+      if(chats.length > 0){
         localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chats));
       }
     } catch (error) {
@@ -81,7 +82,14 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const deleteChat = useCallback((chatId: string) => {
-    setChats(prev => prev.filter(c => c.id !== chatId));
+    setChats(prev => {
+      const newChats = prev.filter(c => c.id !== chatId);
+      if (newChats.length === 0) {
+        localStorage.removeItem(CHAT_STORAGE_KEY);
+      }
+      return newChats;
+    });
+    
     if (activeChatId === chatId) {
       setActiveChatId(null);
       router.push('/chat');
@@ -107,7 +115,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newUserMessage: Message = { id: crypto.randomUUID(), role: 'user', content };
     const assistantMessage: Message = { id: crypto.randomUUID(), role: 'assistant', content: '' };
     
-    const updatedMessages = [...activeChat.messages, newUserMessage, assistantMessage];
+    const updatedMessages = [...activeChat.messages, newUserMessage];
     updateChatMessages(activeChatId, updatedMessages);
     
     try {
@@ -116,9 +124,11 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         content
       );
 
+      let accumulatedContent = '';
       const reader = stream.getReader();
       const decoder = new TextDecoder();
-      let accumulatedContent = '';
+      
+      updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
 
       while (true) {
         const { done, value } = await reader.read();
@@ -126,17 +136,17 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         accumulatedContent += decoder.decode(value, { stream: true });
         assistantMessage.content = accumulatedContent;
-        updateChatMessages(activeChatId, [...activeChat.messages, newUserMessage, { ...assistantMessage }]);
+        updateChatMessages(activeChatId, [...updatedMessages, { ...assistantMessage }]);
       }
       
-      const conversationHistory = [...activeChat.messages, newUserMessage, assistantMessage].map(m => m.content);
+      const conversationHistory = [...updatedMessages, assistantMessage].map(m => m.content);
       const suggestionResult = await suggestResponseOptions({ conversationHistory, currentMessage: assistantMessage.content });
       setSuggestions(suggestionResult);
 
     } catch (error) {
       console.error('Error streaming response:', error);
       assistantMessage.content = 'Sorry, I encountered an error. Please try again.';
-      updateChatMessages(activeChatId, [...activeChat.messages, newUserMessage, assistantMessage]);
+      updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
        toast({
         variant: 'destructive',
         title: 'AI Error',
@@ -165,8 +175,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useChat = () => {
   const context = useContext(ChatContext);
   if (context === undefined) {
-    // This allows useChat to be used on the product selection page without a provider
-    return {} as Partial<ChatContextType>;
+    throw new Error('useChat must be used within a ChatProvider');
   }
   return context;
 };
