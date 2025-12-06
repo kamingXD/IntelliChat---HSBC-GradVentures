@@ -8,8 +8,8 @@ import type { Message } from './types';
 const ChatRequestSchema = z.object({
   history: z.array(
     z.object({
-      role: z.enum(['user', 'model']),
-      content: z.array(z.object({ text: z.string() })),
+      role: z.enum(['user', 'assistant', 'system']),
+      content: z.string(),
     })
   ),
   prompt: z.string(),
@@ -23,21 +23,24 @@ const continueConversationFlow = ai.defineFlow(
   },
   async ({ history, prompt }) => {
     const llmResponse = await ai.generate({
-      history: history,
-      prompt: prompt,
+      // An OpenAI-compatible history consists of a flat list of messages.
+      // The new user prompt is just the last message in that list.
+      history: [...history, { role: 'user', content: prompt }],
+      prompt: '', // The prompt is included in the history
       stream: true,
     });
 
     // The entire flow result is streamed to the client, so we just need
     // to return the text from the stream.
-    return llmResponse.text();
+    return llmResponse.text;
   }
 );
 
 export async function continueConversation(history: Message[], prompt: string) {
+    // OpenAI-compatible models expect a flat list of messages
     const messages = history.map(m => ({
-        role: m.role === 'assistant' ? 'model' as const : 'user' as const,
-        content: [{ text: m.content }]
+        role: m.role,
+        content: m.content
     }));
 
     const flowStream = new ReadableStream({
