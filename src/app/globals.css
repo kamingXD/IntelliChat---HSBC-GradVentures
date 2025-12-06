@@ -91,13 +91,18 @@ body {
 
 @layer components {
     .prose {
-        @apply text-foreground;
+        @apply text-foreground max-w-full;
     }
-    .prose p {
-        @apply my-0 mb-2;
-    }
+    .prose p,
+    .prose ul,
+    .prose ol,
+    .prose blockquote,
+    .prose pre,
     .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-        @apply text-foreground my-1;
+        @apply my-0;
+    }
+     .prose p, .prose li {
+        @apply mb-2;
     }
     .prose strong {
         @apply text-foreground;
@@ -108,22 +113,13 @@ body {
     .prose code {
         @apply text-sm font-mono bg-muted text-foreground rounded-sm px-1 py-0.5;
     }
-    .prose pre {
-        @apply bg-muted text-foreground p-3 rounded-md my-1;
-    }
     .prose blockquote {
-        @apply border-l-4 border-primary pl-4 text-muted-foreground my-1;
-    }
-    .prose ul, .prose ol {
-        @apply my-0 list-inside;
-    }
-    .prose li {
-        @apply mb-1;
+        @apply border-l-4 border-primary pl-4;
     }
     .prose li > p {
         @apply my-0;
     }
     .prose hr {
-        @apply my-1;
+        @apply my-2;
     }
 }
