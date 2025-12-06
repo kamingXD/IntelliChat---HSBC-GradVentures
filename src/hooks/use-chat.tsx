@@ -123,7 +123,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       const stream = await continueConversation(
-        updatedMessages.map(({ id, ...rest }) => rest),
+        updatedMessages.map(({ id, ...rest }) => ({...rest, role: rest.role === 'assistant' ? 'model' : 'user'} as {content: string; role: 'user' | 'model'})),
         content
       );
 
