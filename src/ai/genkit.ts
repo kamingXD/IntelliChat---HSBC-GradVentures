@@ -4,9 +4,8 @@ import {googleAI} from '@genkit-ai/google-genai';
 export const ai = genkit({
   plugins: [
     googleAI({
-      apiKey: process.env.NVIDIA_API_KEY,
-      baseUrl: 'https://integrate.api.nvidia.com/v1',
+      apiKey: process.env.GEMINI_API_KEY,
     }),
   ],
-  model: 'gpt-oss-120b',
+  model: 'gemini-1.5-flash-latest',
 });
