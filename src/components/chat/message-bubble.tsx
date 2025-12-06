@@ -20,7 +20,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
     <div
       className={cn(
         'flex items-start gap-3 w-full max-w-xl',
-        isUser ? 'ml-auto flex-row-reverse' : 'mr-auto flex-row'
+        isUser ? 'ml-auto flex-row-reverse' : 'mr-auto'
       )}
     >
       <Avatar className="w-8 h-8">
