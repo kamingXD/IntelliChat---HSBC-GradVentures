@@ -31,23 +31,23 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       </Avatar>
       <div
         className={cn(
-          'p-3 rounded-lg relative',
+          'p-2 rounded-lg relative',
           isUser
             ? 'bg-muted text-foreground rounded-br-none'
             : 'bg-primary/10 text-foreground rounded-bl-none',
         )}
       >
-        {isLoading ? (
-          <div className="flex items-center justify-center p-2">
-            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-          </div>
-        ) : (
-          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {message.content}
-              </ReactMarkdown>
-          </div>
-        )}
+        <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {message.content}
+            </ReactMarkdown>
+          )}
+        </div>
       </div>
     </div>
   );
