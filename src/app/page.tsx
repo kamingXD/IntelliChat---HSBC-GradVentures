@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useChat } from '@/hooks/use-chat';
-import { Logo } from '@/components/logo';
+import { HsbcLogo } from '@/components/hsbc-logo';
 
 const productTypes = [
   {
@@ -55,8 +55,8 @@ export default function ProductSelectionPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 sm:p-6 md:p-8">
       <header className="mb-8 text-center">
         <div className="flex justify-center items-center gap-4 mb-4">
-          <Logo className="h-12 w-12 text-primary" />
-          <h1 className="text-4xl md:text-5xl font-bold font-headline text-primary-foreground tracking-tight">
+          <HsbcLogo className="h-12 w-12" />
+          <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight">
             IntelliChat
           </h1>
         </div>
@@ -74,7 +74,7 @@ export default function ProductSelectionPage() {
             >
               <CardHeader className="flex flex-row items-center gap-4 pb-2">
                 <product.icon className="w-8 h-8 text-primary" />
-                <CardTitle className="font-headline text-xl text-primary-foreground">{product.name}</CardTitle>
+                <CardTitle className="font-headline text-xl">{product.name}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-sm">

@@ -2,9 +2,9 @@
 
 import { cn } from '@/lib/utils';
 import type { Message } from '@/lib/types';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Loader2 } from 'lucide-react';
-import { Logo } from '../logo';
+import { HsbcLogo } from '../hsbc-logo';
 
 interface MessageBubbleProps {
   message: Message;
@@ -22,8 +22,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       )}
     >
       <Avatar className="w-8 h-8">
-        {!isUser && <AvatarImage asChild src="/placeholder.svg"><Logo className='p-1' /></AvatarImage>}
-        <AvatarFallback className="text-xs">
+        {!isUser && <HsbcLogo className='p-1 bg-primary text-primary-foreground' />}
+        <AvatarFallback className="text-xs bg-muted text-muted-foreground">
           {isUser ? 'YOU' : 'AI'}
         </AvatarFallback>
       </Avatar>
@@ -31,8 +31,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         className={cn(
           'p-3 rounded-lg relative',
           isUser
-            ? 'bg-primary text-primary-foreground rounded-br-none'
-            : 'bg-card border shadow-sm rounded-bl-none',
+            ? 'bg-muted text-foreground rounded-br-none'
+            : 'bg-primary/10 text-foreground rounded-bl-none',
         )}
       >
         {isLoading ? (

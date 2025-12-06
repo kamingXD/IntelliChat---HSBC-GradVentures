@@ -4,7 +4,7 @@ import { useRef, type FormEvent } from 'react';
 import { useChat } from '@/hooks/use-chat';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { SendHorizonal, Loader2 } from 'lucide-react';
+import { Send, Loader2 } from 'lucide-react';
 import SuggestedResponses from './suggested-responses';
 
 export default function ChatInput() {
@@ -42,14 +42,14 @@ export default function ChatInput() {
         <Button
           type="submit"
           size="icon"
-          className="w-10 h-10 rounded-full bg-accent hover:bg-accent/90"
+          className="w-10 h-10 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
           disabled={isLoading}
           aria-label="Send message"
         >
           {isLoading ? (
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
-            <SendHorizonal className="h-5 w-5" />
+            <Send className="h-5 w-5" />
           )}
         </Button>
       </form>

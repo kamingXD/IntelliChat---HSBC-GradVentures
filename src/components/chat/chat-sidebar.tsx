@@ -7,13 +7,14 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarMenuAction,
+  SidebarFooter,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, LogOut } from 'lucide-react';
 import { useChat } from '@/hooks/use-chat';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { Logo } from '../logo';
+import { HsbcLogo } from '../hsbc-logo';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,7 +38,7 @@ export default function ChatSidebar() {
   const handleNewChat = () => {
     router.push('/');
   };
-  
+
   const handleDelete = (e: React.MouseEvent, chatId: string) => {
     e.stopPropagation();
     e.preventDefault();
@@ -48,7 +49,7 @@ export default function ChatSidebar() {
     <>
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <Logo />
+          <HsbcLogo />
           <span className="text-lg font-semibold font-headline">IntelliChat</span>
         </div>
         <Button
@@ -108,6 +109,12 @@ export default function ChatSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
+      <SidebarFooter>
+        <Button variant="ghost" className="justify-start">
+            <LogOut className="mr-2" />
+            Logout
+        </Button>
+      </SidebarFooter>
     </>
   );
 }

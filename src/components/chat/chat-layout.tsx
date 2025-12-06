@@ -11,12 +11,12 @@ export function ChatLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div className="flex h-screen w-full">
-        <Sidebar collapsible="icon">
-          <ChatSidebar />
-        </Sidebar>
         <SidebarInset className="p-0">
           {children}
         </SidebarInset>
+        <Sidebar collapsible="offcanvas" side="right">
+          <ChatSidebar />
+        </Sidebar>
       </div>
     </SidebarProvider>
   );

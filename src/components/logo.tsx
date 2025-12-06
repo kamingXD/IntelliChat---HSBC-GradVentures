@@ -18,8 +18,8 @@ export function Logo({ className }: { className?: string }) {
         fill="currentColor"
         className="text-primary"
       />
-      <path d="M4 12L20 21L36 12" stroke="hsl(var(--card))" strokeWidth="2" />
-      <path d="M20 36V21" stroke="hsl(var(--card))" strokeWidth="2" />
+      <path d="M4 12L20 21L36 12" stroke="hsl(var(--primary-foreground))" strokeWidth="2" />
+      <path d="M20 36V21" stroke="hsl(var(--primary-foreground))" strokeWidth="2" />
     </svg>
   );
 }
