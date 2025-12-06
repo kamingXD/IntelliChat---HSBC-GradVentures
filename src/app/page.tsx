@@ -55,7 +55,7 @@ export default function ProductSelectionPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 sm:p-6 md:p-8">
       <header className="mb-8 text-center">
         <div className="flex justify-center items-center gap-4 mb-4">
-          <HsbcLogo className="h-12 w-12" />
+          <HsbcLogo className="h-12" />
           <h1 className="text-4xl md:text-5xl font-bold font-headline tracking-tight">
             IntelliChat
           </h1>

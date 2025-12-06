@@ -12,7 +12,7 @@ export default function ChatHeader() {
   return (
     <header className="flex items-center justify-between p-4 border-b bg-card shadow-sm">
       <div className="flex items-center gap-2">
-        <HsbcLogo className="h-7 w-7" />
+        <HsbcLogo iconOnly className="h-7 w-7" />
       </div>
       <h2 className="text-lg font-semibold">Chat</h2>
       <Button variant="ghost" size="icon" onClick={toggleSidebar}>

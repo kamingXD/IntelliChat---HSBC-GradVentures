@@ -22,7 +22,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       )}
     >
       <Avatar className="w-8 h-8">
-        {!isUser && <HsbcLogo className='p-1 bg-primary text-primary-foreground' />}
+        {!isUser && <HsbcLogo iconOnly className='p-1 bg-primary text-primary-foreground' />}
         <AvatarFallback className="text-xs bg-muted text-muted-foreground">
           {isUser ? 'YOU' : 'AI'}
         </AvatarFallback>
