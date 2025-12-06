@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useChat } from '@/hooks/use-chat';
 import ChatView from '@/components/chat/chat-view';
 import { AlertTriangle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ChatPage() {
   const params = useParams();
-  const { setActiveChatId, activeChat } = useChat();
+  const router = useRouter();
+  const { setActiveChatId, activeChat, isLoading: isChatHookLoading } = useChat();
 
   const chatId = Array.isArray(params.chatId) ? params.chatId[0] : params.chatId;
 
@@ -23,20 +25,35 @@ export default function ChatPage() {
     };
   }, [chatId, setActiveChatId]);
 
-  if (!activeChat) {
+  useEffect(() => {
+    if (!isChatHookLoading && !activeChat) {
+      router.push('/');
+    }
+  }, [activeChat, isChatHookLoading, router]);
+
+  if (isChatHookLoading || !activeChat) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-         <div className="flex items-center justify-center w-20 h-20 rounded-full bg-destructive/10">
-            <AlertTriangle className="w-10 h-10 text-destructive" />
-        </div>
-        <div className="text-center">
-            <h2 className="text-2xl font-semibold font-headline tracking-tight">
-            Chat not found
-            </h2>
-            <p className="text-muted-foreground mt-1">
-            The chat you are looking for does not exist.
-            </p>
-        </div>
+        <div className="flex flex-col h-screen">
+            <div className="flex items-center justify-between p-2 md:p-4 border-b bg-card">
+                <div className="flex items-center gap-2">
+                    <Skeleton className="h-8 w-8 md:hidden" />
+                    <Skeleton className="h-6 w-32" />
+                </div>
+                <Skeleton className="h-8 w-8" />
+            </div>
+            <div className="flex-1 p-4 md:p-6 space-y-6">
+                <div className="flex items-start gap-3 mr-auto w-full max-w-xl">
+                    <Skeleton className="w-8 h-8 rounded-full" />
+                    <Skeleton className="h-12 w-48" />
+                </div>
+                <div className="flex items-start gap-3 ml-auto w-full max-w-xl flex-row-reverse">
+                    <Skeleton className="w-8 h-8 rounded-full" />
+                    <Skeleton className="h-16 w-64" />
+                </div>
+            </div>
+            <div className="p-4 bg-card border-t">
+                <Skeleton className="h-10 w-full" />
+            </div>
       </div>
     );
   }
