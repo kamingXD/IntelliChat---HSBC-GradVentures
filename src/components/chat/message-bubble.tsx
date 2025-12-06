@@ -41,14 +41,12 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           <div className="flex items-center justify-center p-2">
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           </div>
-        ) : isUser ? (
-           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
         ) : (
-            <div className="prose prose-sm dark:prose-invert max-w-none">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {message.content}
-                </ReactMarkdown>
-            </div>
+          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {message.content}
+              </ReactMarkdown>
+          </div>
         )}
       </div>
     </div>
