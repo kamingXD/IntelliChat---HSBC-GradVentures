@@ -4,50 +4,35 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import type { Message } from './types';
 
+// This schema is not directly used by the exported function,
+// but it's good practice for defining flow inputs.
 const ChatRequestSchema = z.object({
   history: z.array(
     z.object({
-      role: z.enum(['user', 'assistant', 'system']),
+      role: z.enum(['user', 'assistant']),
       content: z.string(),
     })
   ),
   prompt: z.string(),
 });
 
-const continueConversationFlow = ai.defineFlow(
-  {
-    name: 'continueConversationFlow',
-    inputSchema: ChatRequestSchema,
-    outputSchema: z.string(),
-  },
-  async ({ history, prompt }) => {
+// We don't need to define a separate flow here.
+// We can call ai.generate directly in the server action.
+
+export async function continueConversation(history: Omit<Message, 'id'>[], prompt: string) {
     const llmResponse = await ai.generate({
-      history: history,
-      prompt: prompt,
-      stream: true,
-    });
-
-    return llmResponse.text;
-  }
-);
-
-export async function continueConversation(history: Message[], prompt: string) {
-    // OpenAI-compatible models expect a flat list of messages
-    const messages = history.map(m => ({
-        role: m.role,
-        content: m.content
-    }));
-
-    const llmResponse = await ai.generate({
-        history: messages,
+        history: history,
         prompt: prompt,
         stream: true
     });
 
     const stream = new ReadableStream({
         async start(controller) {
+            const encoder = new TextEncoder();
             for await (const chunk of llmResponse.stream) {
-                controller.enqueue(chunk.text);
+                if (chunk.text) {
+                    controller.enqueue(encoder.encode(chunk.text));
+                }
             }
             controller.close();
         }
