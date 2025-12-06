@@ -93,17 +93,6 @@ body {
     .prose {
         @apply text-foreground max-w-full;
     }
-    .prose p,
-    .prose ul,
-    .prose ol,
-    .prose blockquote,
-    .prose pre,
-    .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-        @apply my-0;
-    }
-     .prose p, .prose li {
-        @apply mb-2;
-    }
     .prose strong {
         @apply text-foreground;
     }
@@ -116,12 +105,10 @@ body {
     .prose blockquote {
         @apply border-l-4 border-primary pl-4;
     }
-    .prose li > p {
-        @apply my-0;
-    }
     .prose hr {
         @apply my-2;
     }
+    
     .chat-bubble-content p,
     .chat-bubble-content ul,
     .chat-bubble-content ol,
@@ -146,5 +133,9 @@ body {
 
     .chat-bubble-content li > p {
         margin-bottom: 0 !important;
+    }
+
+    .chat-bubble-content li:not(:last-child) {
+        margin-bottom: 0.25rem; /* 4px */
     }
 }

@@ -138,10 +138,6 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const chunk = decoder.decode(value, { stream: true });
         assistantMessage.content += chunk;
-        
-        const sanitizedContent = assistantMessage.content.replace(/\n{2,}/g, '\n\n');
-        assistantMessage.content = sanitizedContent;
-
 
         if (!assistantMessageAdded) {
           updateChatMessages(activeChatId, [...updatedMessages, assistantMessage]);
